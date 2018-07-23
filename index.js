@@ -271,7 +271,7 @@ function reshow(){
             h5.innerHTML = `${collection.name}`;
             p.innerHTML = `${collection.desc}`; // Make the HTML of our span to be the first and last name of our author
             var button = createButton("DELETE");
-            
+            button.id = collection.id;
   const collectData = createHTMLElement(`
 
                   <button type="button" class="btn btn-indigo mt-auto" data-toggle="modal" data-target="#centralModalSuccess" id="viewButton">
@@ -291,7 +291,7 @@ function reshow(){
             const id = button.id;
             const value = collection.name;
             button.onclick = function(){
-                delCollection(id);
+                delCollection(id , value);
             }
             button1.onclick = function(){
                 reload(value);
@@ -300,7 +300,7 @@ function reshow(){
     })
 }
 
-function delCollection(id){
+function delCollection(id, value){
     let fetchData = { 
         method: "DELETE", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, cors, *same-origin
@@ -309,10 +309,21 @@ function delCollection(id){
         redirect: "follow", // manual, *follow, error
         referrer: "no-referrer", // no-referrer, *client
     }
-    let deleteUrl = "http://localhost:3000/newCollections/"+id;
-    
-    fetch(deleteUrl, fetchData)
-    .then(reshow());       
+let deleteUrl = "http://localhost:3000/newCollection/" + id;
+let getUrl = "http://localhost:3000/collections?collection=" + value;
+fetch(deleteUrl, fetchData)
+.then(function(data){
+reshow();
+});
+fetch(getUrl).
+then((resp)=>resp.json())
+.then(function(data){
+return data.map(function(collection){
+let dlt = "http://localhost:3000/collections/" + collection.id;
+fetch(dlt,fetchData);
+})
+});  
+       
 }
 
 function createHTMLElement(html) {
