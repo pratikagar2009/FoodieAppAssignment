@@ -166,7 +166,10 @@ function addCollection(id , value){
 
 
   function reload(value){
-    var getUrl = "http://localhost:3000/collections";
+    //var getUrl = "http://localhost:3000/collections";
+    
+var getUrl = "http://localhost:3000/collections/?collection=" + value; 
+
     var modalb = document.getElementById('modalb');
     modalb.innerHTML = "";
     fetch(getUrl)
